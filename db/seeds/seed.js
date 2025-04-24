@@ -79,7 +79,6 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       ]
     })
     const articlesTable = format(`INSERT INTO articles(title, topic, author, body, created_at, votes, article_img_url) VALUES %L`, formatedArticleData);
-    console.log(articlesTable,'<<<<<<<')
     return db.query(articlesTable)
   })
   .then(() => {
