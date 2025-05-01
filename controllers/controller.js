@@ -1,4 +1,4 @@
-const {selectApi, selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId} = require('../models/model')
+const {selectApi, selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, selectUsers} = require('../models/model')
 const endpoints = require('../endpoints.json')
 
 exports.getApi = (req, res) => {
@@ -50,6 +50,16 @@ exports.postCommentByArticleId = (req, res, next) => {
         res.status(201).send({comment})
     })
     .catch((err) => {
+        next(err)
+    })
+}
+exports.getUsers = (req, res, next) => {
+    return selectUsers()
+    .then((users) => {
+        res.status(200).send({users})
+    })
+    .catch((err) => {
+        console.log(err)
         next(err)
     })
 }
