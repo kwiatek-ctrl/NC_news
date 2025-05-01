@@ -42,4 +42,10 @@ exports.selectPostCommentByArticleId = (article_id, username, body) => {
     .then(({rows}) => {
         return rows[0]
     })
+    .catch((err) => {
+        if (err.code === '23503') {
+            return Promise.reject({ status: 404, msg: 'Article not found!' })
+        }
+        return Promise.reject(err)
+    })
 }
