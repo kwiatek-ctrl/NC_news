@@ -43,3 +43,10 @@ exports.selectPostCommentByArticleId = (article_id, username, body) => {
         return rows[0]
     })
 }
+exports.selectUsers = (users) => {
+    return db
+    .query('SELECT * FROM users')
+    .then((result) => {
+        return result.rows
+    })
+}
