@@ -5,7 +5,7 @@ const ENV = process.env.NODE_ENV || 'development'
 
 require('dotenv').config({path: `${__dirname}/../.env.${ENV}`})
 
-const db = new Pool(config);
+const db = new Pool();
 
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
     throw new Error("No PGDATABASE or DATABASE_URL configured")
@@ -19,4 +19,4 @@ if (ENV === "production") {
     config.max = 2;
 }
 
-module.exports = db;
+module.exports = new Pool(config);
