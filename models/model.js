@@ -25,6 +25,14 @@ exports.selectArticles = (articles) => {
         return result.rows
     })
 }
+exports.selectUsers = (users) => {
+    return db
+    .query('SELECT * FROM users')
+    .then((result) => {
+        return result.rows
+    })
+}
+
 exports.selectCommentsByArticleId = (article_id) => {
     return db
     .query('SELECT * FROM comments WHERE article_id = $1', [article_id])
