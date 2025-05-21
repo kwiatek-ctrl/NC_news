@@ -2,7 +2,8 @@ const express = require('express')
 const db = require('./db/connection')
 const endpointsJson = require("./endpoints.json");
 const app = express()
-const {getApi, getTopics, getArticleById, getArticles, getUsers, getCommentsByArticleId, postCommentByArticleId} = require('./controllers/controller')
+const cors = require('cors')
+const {getApi, getTopics, getArticleById, getArticles, getUsers, getCommentsByArticleId, postCommentByArticleId, deleteCommentById} = require('./controllers/controller')
 
 app.get('/api', getApi)
 app.get('/api/topics', getTopics)
@@ -14,6 +15,9 @@ app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
 
 app.post('/api/articles/:article_id/comments', postCommentByArticleId)
 
+app.delete('/api/comments/:comment_id', deleteCommentById)
+
+app.use(cors())
 app.use((err, req, res, next) => {
     if(err.status && err.msg){
         res.status(err.status).send({msg: err.msg})

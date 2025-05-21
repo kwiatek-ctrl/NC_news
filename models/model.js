@@ -44,10 +44,11 @@ exports.selectCommentsByArticleId = (article_id) => {
         }
     })
 }
-exports.selectPostCommentByArticleId = (article_id, username, body) => {
+exports.selectPostCommentByArticleId = (article_id) => {
     return db
-    .query('INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *', [article_id, username, body])
+    .query('SELECT * FROM comments WHERE article_id = $1', [article_id])
     .then(({rows}) => {
+        console.log(rows[0])
         return rows[0]
     })
     .catch((err) => {
@@ -55,5 +56,16 @@ exports.selectPostCommentByArticleId = (article_id, username, body) => {
             return Promise.reject({ status: 404, msg: 'Article not found!' })
         }
         return Promise.reject(err)
+    })
+}
+exports.selectCommentById = (comment_id) => {
+    return db
+    .query('DELETE FROM comments WHERE commment_id = $1 RETURNING *', [comment_id])
+    .then(({rows}) => {
+        if (rows.length === 0) {
+            return Promise.reject({status: 404, msg: 'Comment not found!'})
+        } else {
+            return rows[0]
+        }
     })
 }

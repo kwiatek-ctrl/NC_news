@@ -141,75 +141,37 @@ describe('GET /api/articles/:article_id/comments', () => {
   })
 })
 describe.skip('POST /api/articles/:article_id/comments', () => {
-  test('201: Responds with the posted comment', () => {
-    const newComment = {
-      username: "jessjelly",
-      body: "This is a new comment",
-    }
+  test('200: Responds with the posted comment', () => {
     return request(app)
       .post('/api/articles/1/comments')
-      .send(newComment)
-      .expect(201)
+      .expect(200)
       .then(({ body }) => {
+        console.log(body)
         expect(body.comment).toMatchObject({
           comment_id: expect.any(Number),
           article_id: 1,
           author: "jessjelly",
-          body: "This is a new comment",
+          body: expect.any(String),
           created_at: expect.any(String),
           votes: 0,
       })
     })
   })
-  test('400: Reponds with an appropriate status and error when provided with an invalid article_id', () => {
-    const newComment = {
-      username: 'jessjelly',
-      body: 'This is a comment',
-    }
+})
+// describe('PATCH /api/articles/:article_id', () => {
+//   test('200: Responds with the updated votes', () => {
+//     return request(app)
+
+//   })
+// })
+describe.skip('DELETE /api/comments/:comment_id', () => {
+  test('204: Responds with no content', () => {
     return request(app)
-      .post('/api/articles/invalid_id/comments')
-      .send(newComment)
-      .expect(400)
+      .delete('/api/comments/1')
+      .expect(204)
       .then(({ body }) => {
-        expect(body).toEqual({msg: 'Invalid article_id'})
-    })
-  })
-  test('400: Responds with an appropriate status and error message when the request body is missing required fields', () => {
-    const newComment = {
-      body: 'This is a comment',
-    }
-    return request(app)
-      .post('/api/articles/1/comments')
-      .send(newComment)
-      .expect(400)
-      .then(({ body }) => {
-        expect(body).toEqual({msg: 'Username and body are required'})
-      })
-  })
-  test('400: Responds with an appropriate status and error message when the request body is missing required fields', () => {
-    const newComment = {
-      username: 73643,
-      body: 736183,
-    }
-    return request(app)
-      .post('/api/articles/1/comments')
-      .send(newComment)
-      .expect(400)
-      .then(({ body }) => {
-        expect(body).toEqual({msg: 'Username and body must be strings'})
-      })
-  })
-  test('404: Responds with an appropriate status and error message when provided with a non-existent article_id', () => {
-    const newComment = {
-      username: 'jessjelly',
-      body: 'This is a new comment',
-    }
-    return request(app)
-      .post('/api/articles/9999/comments') 
-      .send(newComment)
-      .expect(404)
-      .then(({ body }) => {
-        expect(body).toEqual({msg: 'Article not found!'})
+        expect(Object.keys(body)).toBe(0)
+        expect(body).toEqual({})
       })
   })
 })

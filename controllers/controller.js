@@ -1,4 +1,4 @@
-const {selectTopics, selectArticleById, selectArticles, selectUsers, selectCommentsByArticleId, selectPostCommentByArticleId} = require('../models/model')
+const {selectTopics, selectArticleById, selectArticles, selectUsers, selectCommentsByArticleId, selectPostCommentByArticleId, selectCommentById} = require('../models/model')
 const endpoints = require('../endpoints.json')
 
 exports.getApi = (req, res) => {
@@ -54,15 +54,26 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.postCommentByArticleId = (req, res, next) => {
     const {article_id} = req.params
     const {username, body} = req.body
-    if (!username || !body) {
-        return next({status: 400, msg: 'Username and body are required'})
-    }
-    if (typeof username !== 'string' || typeof body !== 'string') {
-        return next({status: 400, msg: 'Username and body must be strings'})
-    }
+    // if (!username || !body) {
+    //     return next({status: 400, msg: 'Username and body are required'})
+    // }
+    // if (typeof username !== 'string' || typeof body !== 'string') {
+    //     return next({status: 400, msg: 'Username and body must be strings'})
+    // }
     return selectPostCommentByArticleId(article_id, username, body)
     .then((comment) => {
-        res.status(201).send({comment})
+        res.status(200).send({comment})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+exports.deleteCommentById = (req, res, next) => {
+    const {comment_id} = req.params
+    
+    return selectCommentById(comment_id)
+    .then((comment) => {
+        res.status(204).send({comment})
     })
     .catch((err) => {
         next(err)
